@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
   <title>OttakuBrasil Store</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,10 +17,10 @@
     }
   </script>
 
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 
-<body data-page="${page}" class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen pt-[75px] overflow-x-hidden">
+<body data-page="checkout" class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen pt-[75px] overflow-x-hidden">
 
   <!-- CABEÇALHO -->
   <header class="fixed top-0 left-0 w-full z-50 bg-brand/85 backdrop-blur-lg shadow-md text-gray-900 border-b border-white/40 transition-all duration-300" id="main-header">
@@ -104,6 +105,6 @@
     </div>
   </div>
 
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
