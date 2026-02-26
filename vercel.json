@@ -1,11 +1,16 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/produto", "destination": "/produto.html" },
-    { "source": "/produto.html", "destination": "/produto.html" },
-    { "source": "/checkout", "destination": "/checkout.html" },
-    { "source": "/checkout.html", "destination": "/checkout.html" },
-    { "source": "/style.css", "destination": "/style.css" },
-    { "source": "/app.js", "destination": "/app.js" }
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/checkout",
+      "destination": "/checkout.html"
+    },
+    {
+      "source": "/produto/:pid",
+      "destination": "/produto.html?pid=:pid"
+    }
   ]
 }
