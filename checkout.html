@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OttakuBrasil Store</title>
+  <title>OttakuBrasil - Checkout</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -45,22 +45,6 @@
             <span id="icon-bag"></span>
             <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-gray-900 text-brand text-xs font-black rounded-full w-5 h-5 flex items-center justify-center shadow-md">0</span>
           </button>
-        </div>
-      </div>
-
-      <!-- SUB HEADER (Pesquisa/Filtros) -->
-      <div id="sub-header" class="overflow-visible transition-all duration-300 ease-in-out max-h-20 opacity-100 mt-3 pb-1">
-        <div class="flex items-center gap-2 relative">
-          <div class="w-full relative flex items-center">
-            <span id="icon-search" class="absolute left-3 text-gray-700"></span>
-            <input type="text" id="search-input" placeholder="Buscar animes, produtos..." class="w-full pl-10 pr-4 py-2.5 bg-white/40 border border-white/50 rounded-xl text-sm text-gray-900 placeholder-gray-700 font-medium focus:outline-none focus:bg-white/60 focus:border-white transition-all backdrop-blur-sm" oninput="updateSearch(event.target.value)">
-          </div>
-          <div class="relative flex-shrink-0" id="filter-container">
-            <button onclick="toggleFilter()" id="filter-btn" class="p-2.5 rounded-xl transition-all border bg-white/40 border-white/50 hover:bg-white/50" title="Filtros">
-              <span id="icon-sliders" class="text-gray-900"></span>
-            </button>
-            <div id="filter-dropdown"></div>
-          </div>
         </div>
       </div>
     </div>
