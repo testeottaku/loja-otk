@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/p/:id",
+      "destination": "/produto.html?id=:id"
+    },
+    {
+      "source": "/checkout",
+      "destination": "/checkout.html"
+    }
+  ]
+}
