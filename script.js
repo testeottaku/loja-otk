@@ -1069,8 +1069,7 @@ function loadCouponFromStorage() {
                 <div class="mt-5 bg-gray-50 border border-gray-200 rounded-2xl p-4">
                   <p class="text-sm text-gray-800 font-bold">Como funciona agora</p>
                   <p class="text-sm text-gray-600 font-semibold mt-2">
-                    Seu pedido é fechado pelo WhatsApp. A gente confirma disponibilidade, frete e pagamento por lá.
-                    Se você sair do WhatsApp e voltar aqui, seu pedido não duplica, porque o carrinho foi limpo.
+                    Seu pedido é fechado pelo WhatsApp. A gente confirma disponibilidade, frete e pagamento por lá! Qualquer duvida é só nós perguntar 😉.
                   </p>
                 </div>
 
@@ -1087,9 +1086,8 @@ function loadCouponFromStorage() {
                   </div>
                 </div>
 
-                <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                  <button onclick="changeView('home')" class="flex-1 bg-brand text-gray-900 px-6 py-3 rounded-xl font-black hover:bg-[#1bc762] transition shadow-md">Voltar às compras</button>
-                  <button onclick="clearLastOrder(); renderApp();" class="flex-1 bg-white border border-gray-200 text-gray-900 px-6 py-3 rounded-xl font-black hover:bg-gray-50 transition">Limpar histórico aqui</button>
+                <div class="mt-6">
+                  <button onclick="changeView('home')" class="w-full bg-brand text-gray-900 px-6 py-3 rounded-xl font-black hover:bg-[#1bc762] transition shadow-md">Voltar às compras</button>
                 </div>
               </div>
             </div>
