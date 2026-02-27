@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/produto/:id",
-      "destination": "/produto.html?id=:id"
+      "destination": "/api/produto?id=:id"
     },
     {
       "source": "/produto/:id/",
-      "destination": "/produto.html?id=:id"
+      "destination": "/api/produto?id=:id"
     },
     {
       "source": "/checkout",
