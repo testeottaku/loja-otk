@@ -240,12 +240,14 @@ var PRODUCTS = window.PRODUCTS || [];
     ANIMES = window.ANIMES || [];
     state.loadingCatalog = false;
     state.catalogError = '';
+    if (typeof window.syncSelectedProductFromRoute === "function") { window.syncSelectedProductFromRoute(); }
     if (typeof window.renderApp === "function") window.renderApp();
   });
 
   window.addEventListener("catalog-error", (ev) => {
     state.loadingCatalog = false;
     state.catalogError = (ev && ev.detail && ev.detail.error) ? ev.detail.error : "Erro ao carregar catálogo.";
+    if (typeof window.syncSelectedProductFromRoute === "function") { window.syncSelectedProductFromRoute(); }
     if (typeof window.renderApp === "function") window.renderApp();
   });
 // Inicializar ícones estáticos
@@ -1092,8 +1094,11 @@ var PRODUCTS = window.PRODUCTS || [];
       }
     }
 
+    window.syncSelectedProductFromRoute = syncSelectedProductFromRoute;
+
     window.addEventListener("catalog-loaded", () => {
       syncSelectedProductFromRoute();
+      renderApp();
     });
 
     syncSelectedProductFromRoute();
