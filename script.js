@@ -172,6 +172,49 @@ var PRODUCTS = window.PRODUCTS || [];
     animeScrollLeft: 0 // Novo estado para guardar o scroll dos animes
   };
 
+  // --- Persistência do carrinho (LocalStorage) ---
+  const STORAGE_KEYS = {
+    cart: 'otk_cart_v1',
+    coupon: 'otk_coupon_v1'
+  };
+
+  function safeJsonParse(str, fallback) {
+    try { return JSON.parse(str); } catch (e) { return fallback; }
+  }
+
+  function loadCartFromStorage() {
+    if (!('localStorage' in window)) return [];
+    const raw = localStorage.getItem(STORAGE_KEYS.cart);
+    const arr = safeJsonParse(raw, []);
+    if (!Array.isArray(arr)) return [];
+    // Sanitiza itens mínimos
+    return arr.filter(i => i && (i.id != null) && (i.quantity != null));
+  }
+
+  function saveCartToStorage() {
+    if (!('localStorage' in window)) return;
+    try { localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(state.cart || [])); } catch (e) {}
+  }
+
+  function loadCouponFromStorage() {
+    if (!('localStorage' in window)) return { code: '', discount: 0 };
+    const raw = localStorage.getItem(STORAGE_KEYS.coupon);
+    const c = safeJsonParse(raw, null);
+    if (!c || typeof c !== 'object') return { code: '', discount: 0 };
+    const code = (typeof c.code === 'string') ? c.code : '';
+    const discount = (typeof c.discount === 'number') ? c.discount : 0;
+    return { code, discount };
+  }
+
+  function saveCouponToStorage() {
+    if (!('localStorage' in window)) return;
+    try { localStorage.setItem(STORAGE_KEYS.coupon, JSON.stringify(state.coupon || { code:'', discount:0 })); } catch (e) {}
+  }
+
+  // Carrega carrinho/cupom assim que o estado nasce
+  state.cart = loadCartFromStorage();
+  state.coupon = loadCouponFromStorage();
+
   const formatPrice = (price) => Number(price || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
   const parseOptionalPrice = (v) => {
@@ -715,6 +758,51 @@ var PRODUCTS = window.PRODUCTS || [];
     }
 
     function getProductHTML() {
+      // Enquanto o catálogo está carregando, mostra skeleton (shimmer) ao invés de "não encontrado"
+      if (state.loadingCatalog) {
+        return `
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <div class="bg-white border border-gray-200 rounded-[2rem] p-6 md:p-8 shadow-sm">
+              <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                  <div class="w-full aspect-square rounded-2xl skeleton"></div>
+                  <div class="mt-4 flex gap-2 justify-center">
+                    <div class="w-14 h-14 rounded-xl skeleton"></div>
+                    <div class="w-14 h-14 rounded-xl skeleton"></div>
+                    <div class="w-14 h-14 rounded-xl skeleton"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="h-9 w-3/4 rounded-xl skeleton mb-3"></div>
+                  <div class="h-5 w-1/2 rounded-xl skeleton mb-6"></div>
+
+                  <div class="h-6 w-2/3 rounded-xl skeleton mb-4"></div>
+                  <div class="h-10 w-full rounded-2xl skeleton mb-4"></div>
+
+                  <div class="h-6 w-2/3 rounded-xl skeleton mb-4"></div>
+                  <div class="h-10 w-full rounded-2xl skeleton mb-6"></div>
+
+                  <div class="h-12 w-full rounded-2xl skeleton mb-3"></div>
+                  <div class="h-12 w-full rounded-2xl skeleton"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      if (state.catalogError) {
+        return `
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <div class="bg-white border border-gray-200 rounded-[2rem] p-6 md:p-8 shadow-sm">
+              <h1 class="text-2xl md:text-3xl font-black text-gray-900 mb-2">Erro ao carregar</h1>
+              <p class="text-gray-600 font-medium mb-6">${state.catalogError}</p>
+              <button onclick="window.location.reload()" class="bg-brand hover:bg-[#1bc762] text-gray-900 font-black px-6 py-3 rounded-xl transition">Tentar novamente</button>
+            </div>
+          </section>
+        `;
+      }
+
       const p = state.selectedProduct;
       if(!p) {
         return `
@@ -842,6 +930,7 @@ var PRODUCTS = window.PRODUCTS || [];
         state.cart.push({ ...p, size, color, quantity, unitPrice });
       }
       
+      saveCartToStorage();
       toggleCart(true);
       if(state.view === 'checkout') renderApp();
     }
@@ -1010,6 +1099,8 @@ var PRODUCTS = window.PRODUCTS || [];
         state.coupon = { code: '', discount: 0 };
         alert('Cupom inválido.');
       }
+      saveCouponToStorage();
+      saveCartToStorage();
       updateCartUI();
       if(state.view === 'checkout') renderApp(); 
     }
@@ -1019,6 +1110,7 @@ var PRODUCTS = window.PRODUCTS || [];
       if (state.cart[index].quantity <= 0) {
         state.cart.splice(index, 1);
       }
+    saveCartToStorage();
     }
 
     function updateCartUI() {
