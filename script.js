@@ -166,6 +166,8 @@ var PRODUCTS = window.PRODUCTS || [];
     selectedProduct: null,
     productForm: { size: '', color: '', quantity: 1, imageIndex: 0 },
     checkoutForm: { name:'', phone:'', cep:'', address:'', number:'', complement:'', bairro:'', city:'', checkoutState:'' },
+    lastOrder: null,
+    orderSent: false,
     loadingCatalog: true,
     catalogError: '',
     homePage: 1,
@@ -175,7 +177,8 @@ var PRODUCTS = window.PRODUCTS || [];
   // --- Persistência do carrinho (LocalStorage) ---
   const STORAGE_KEYS = {
     cart: 'otk_cart_v1',
-    coupon: 'otk_coupon_v1'
+    coupon: 'otk_coupon_v1',
+    lastOrder: 'otk_last_order_v1'
   };
 
   function safeJsonParse(str, fallback) {
@@ -196,7 +199,30 @@ var PRODUCTS = window.PRODUCTS || [];
     try { localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(state.cart || [])); } catch (e) {}
   }
 
-  function loadCouponFromStorage() {
+  
+  function loadLastOrderFromStorage() {
+    if (!('localStorage' in window)) return null;
+    const raw = localStorage.getItem(STORAGE_KEYS.lastOrder);
+    const obj = safeJsonParse(raw, null);
+    if (!obj || typeof obj !== 'object') return null;
+    return obj;
+  }
+
+  function saveLastOrderToStorage(order) {
+    if (!('localStorage' in window)) return;
+    try {
+      if (!order) localStorage.removeItem(STORAGE_KEYS.lastOrder);
+      else localStorage.setItem(STORAGE_KEYS.lastOrder, JSON.stringify(order));
+    } catch (e) {}
+  }
+
+  function clearLastOrder() {
+    state.lastOrder = null;
+    state.orderSent = false;
+    saveLastOrderToStorage(null);
+  }
+
+function loadCouponFromStorage() {
     if (!('localStorage' in window)) return { code: '', discount: 0 };
     const raw = localStorage.getItem(STORAGE_KEYS.coupon);
     const c = safeJsonParse(raw, null);
@@ -214,6 +240,7 @@ var PRODUCTS = window.PRODUCTS || [];
   // Carrega carrinho/cupom assim que o estado nasce
   state.cart = loadCartFromStorage();
   state.coupon = loadCouponFromStorage();
+  state.lastOrder = loadLastOrderFromStorage();
 
   const formatPrice = (price) => Number(price || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
@@ -930,6 +957,9 @@ var PRODUCTS = window.PRODUCTS || [];
         state.cart.push({ ...p, size, color, quantity, unitPrice });
       }
       
+      if(state.lastOrder) clearLastOrder();
+
+      
       saveCartToStorage();
       toggleCart(true);
       if(state.view === 'checkout') renderApp();
@@ -970,11 +1000,102 @@ var PRODUCTS = window.PRODUCTS || [];
 
       msg += `💰 *Total produtos: ${formatPrice(cartTotal)}*`;
 
-      window.open(`https://wa.me/5531972379858?text=${encodeURIComponent(msg)}`, '_blank');
+      const waUrl = `https://wa.me/5531972379858?text=${encodeURIComponent(msg)}`;
+      // Abre o WhatsApp em outra aba (mantém a página atual viva para mostrar confirmação)
+      window.open(waUrl, '_blank');
+
+      const order = {
+        id: `OTK-${Date.now()}`,
+        createdAt: Date.now(),
+        customer: { name, phone, cep, address, number, bairro, complement, city, checkoutState },
+        items: state.cart.map(i => ({
+          id: i.id,
+          name: i.name,
+          size: i.size || '',
+          color: i.color || '',
+          quantity: i.quantity,
+          unitPrice: getItemUnitPrice(i)
+        })),
+        coupon: state.coupon && state.coupon.discount ? { ...state.coupon } : null,
+        total: cartTotal
+      };
+
+      state.lastOrder = order;
+      state.orderSent = true;
+      saveLastOrderToStorage(order);
+
+      // Limpa carrinho para evitar pedido duplicado ao voltar
+      state.cart = [];
+      saveCartToStorage();
+
+      // Opcional: manter cupom aplicado só para o pedido enviado
+      state.coupon = { code:'', discount:0 };
+      saveCouponToStorage();
+
+      renderApp();
     }
 
     function getCheckoutHTML() {
       if(state.cart.length === 0) {
+        // Se acabou de enviar o pedido (ou existe último pedido salvo), mostra confirmação + resumo
+        if(state.lastOrder) {
+          const o = state.lastOrder;
+          const dt = new Date(o.createdAt || Date.now());
+          const when = dt.toLocaleString('pt-BR');
+          const itemsHtml = (o.items || []).map(it => `
+            <div class="flex items-start justify-between gap-4 py-3 border-b border-gray-100 last:border-b-0">
+              <div class="min-w-0">
+                <p class="font-extrabold text-gray-900 truncate">${it.name}</p>
+                <p class="text-xs text-gray-500 font-semibold mt-1">ID: ${it.id} • Tam: ${it.size || '—'} • Cor: ${it.color || '—'} • Qtd: ${it.quantity}</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-black text-gray-900">${formatPrice((it.unitPrice||0) * (it.quantity||0))}</p>
+                <p class="text-xs text-gray-500 font-semibold">${formatPrice(it.unitPrice||0)} un.</p>
+              </div>
+            </div>
+          `).join('');
+
+          return `
+            <div class="container mx-auto px-4 py-14 max-w-3xl">
+              <div class="bg-white border border-gray-200 rounded-[2rem] p-6 md:p-8 shadow-sm">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-2xl bg-brand/20 flex items-center justify-center text-gray-900 font-black">✓</div>
+                  <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-gray-900">Pedido enviado com sucesso!</h2>
+                    <p class="text-sm text-gray-600 font-semibold mt-1">Enviado em ${when}</p>
+                  </div>
+                </div>
+
+                <div class="mt-5 bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                  <p class="text-sm text-gray-800 font-bold">Como funciona agora</p>
+                  <p class="text-sm text-gray-600 font-semibold mt-2">
+                    Seu pedido é fechado pelo WhatsApp. A gente confirma disponibilidade, frete e pagamento por lá.
+                    Se você sair do WhatsApp e voltar aqui, seu pedido não duplica, porque o carrinho foi limpo.
+                  </p>
+                </div>
+
+                <div class="mt-6">
+                  <h3 class="text-lg font-black text-gray-900 mb-3">Última compra</h3>
+                  <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+                    <div class="p-4">
+                      ${itemsHtml || '<p class="text-sm text-gray-600 font-semibold">Sem itens para mostrar.</p>'}
+                    </div>
+                    <div class="p-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+                      <span class="text-sm text-gray-600 font-extrabold">Total</span>
+                      <span class="text-lg font-black text-gray-900">${formatPrice(o.total || 0)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                  <button onclick="changeView('home')" class="flex-1 bg-brand text-gray-900 px-6 py-3 rounded-xl font-black hover:bg-[#1bc762] transition shadow-md">Voltar às compras</button>
+                  <button onclick="clearLastOrder(); renderApp();" class="flex-1 bg-white border border-gray-200 text-gray-900 px-6 py-3 rounded-xl font-black hover:bg-gray-50 transition">Limpar histórico aqui</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
         return `
           <div class="container mx-auto px-4 py-20 text-center">
             <div class="flex justify-center text-gray-300 mb-6 scale-150">${Icons.bag}</div>
