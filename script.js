@@ -1,8 +1,41 @@
+/* Loja_v13 - dividido em páginas para Vercel (index / produto / checkout) */
+const Icons = {
+      bag: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+      instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>`,
+      search: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`,
+      sliders: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>`,
+      x: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
+      filter: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>`,
+      plus: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`,
+      minus: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>`,
+      chevronLeft: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>`,
+      trash: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`,
+      truck: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5"/><path d="M14 17h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`,
+      phone: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+      tag: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.584-6.584a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>`
+    };
 
-/* Firebase + Catalog loader */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
-  import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+// --- Firestore: carrega catálogo (produtos, animes e categorias) ---
+(function() {
+  let fbLoaded = false;
+  let initializeApp, getAnalytics, getFirestore, doc, getDoc, collection, getDocs;
+
+  async function ensureFirebase() {
+    if (fbLoaded) return;
+    const appMod = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js");
+    const analyticsMod = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js");
+    const fsMod = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
+    initializeApp = appMod.initializeApp;
+    getAnalytics = analyticsMod.getAnalytics;
+    getFirestore = fsMod.getFirestore;
+    doc = fsMod.doc;
+    getDoc = fsMod.getDoc;
+    collection = fsMod.collection;
+    getDocs = fsMod.getDocs;
+    fbLoaded = true;
+  }
+
+
 
   const firebaseConfig = {
     apiKey: "AIzaSyDtMf3dMVe39AQsCq3k_RYaJspzpunxc24",
@@ -13,12 +46,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebas
     appId: "1:856021486676:web:8cfd4855df5a3c233f31c1",
     measurementId: "G-2TZCC6LP3K"
   };
-
-  const app = initializeApp(firebaseConfig);
-  try { getAnalytics(app); } catch (_) {}
-
-  const db = getFirestore(app);
-  window.__otkDb = db;
 
   const DEFAULT_CATEGORIES = ["Todas", "Camisetas", "Action Figures", "Acessórios"];
 
@@ -84,6 +111,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebas
 
   async function loadCatalogFromFirestore() {
     try {
+      await ensureFirebase();
+      const app = initializeApp(firebaseConfig);
+      try { getAnalytics(app); } catch (_) {}
+      const db = getFirestore(app);
+      window.__otkDb = db;
+
       const catalogRef = doc(db, "config", "catalog");
       const catalogSnap = await getDoc(catalogRef);
       const categories = (catalogSnap.exists() && Array.isArray(catalogSnap.data().categories))
@@ -117,25 +150,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebas
   window.addEventListener("DOMContentLoaded", () => {
     loadCatalogFromFirestore();
   });
+})();
 
-/* Icons */
-const Icons = {
-      bag: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
-      instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>`,
-      search: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`,
-      sliders: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>`,
-      x: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
-      filter: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>`,
-      plus: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`,
-      minus: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>`,
-      chevronLeft: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>`,
-      trash: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`,
-      truck: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5"/><path d="M14 17h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`,
-      phone: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
-      tag: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.584-6.584a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>`
-    };
-
-/* State + helpers */
 var PRODUCTS = window.PRODUCTS || [];
   var CATEGORIES = window.CATEGORIES || ["Todas"];
   var ANIMES = window.ANIMES || [];
@@ -224,18 +240,14 @@ var PRODUCTS = window.PRODUCTS || [];
     ANIMES = window.ANIMES || [];
     state.loadingCatalog = false;
     state.catalogError = '';
-    ensureSelectedProductFromURL();
     if (typeof window.renderApp === "function") window.renderApp();
   });
 
   window.addEventListener("catalog-error", (ev) => {
     state.loadingCatalog = false;
     state.catalogError = (ev && ev.detail && ev.detail.error) ? ev.detail.error : "Erro ao carregar catálogo.";
-    ensureSelectedProductFromURL();
     if (typeof window.renderApp === "function") window.renderApp();
   });
-
-/* App */
 // Inicializar ícones estáticos
     document.getElementById('icon-instagram').innerHTML = Icons.instagram;
     document.getElementById('icon-bag').innerHTML = Icons.bag;
@@ -285,30 +297,57 @@ var PRODUCTS = window.PRODUCTS || [];
       renderApp(false);
     }
 
-    function changeView(view, product = null) {
-      // Navegação entre páginas (Vercel rewrites)
-      try {
-        if (view === 'home') { window.location.href = '/'; return; }
-        if (view === 'checkout') { window.location.href = '/checkout'; return; }
-        if (view === 'product' && product) {
-          const pid = getProductKey(product);
-          window.location.href = '/produto/' + encodeURIComponent(pid);
-          return;
-        }
-      } catch (_) {}
+    function parseRoute() {
+      const path = window.location.pathname.replace(/\/+$/,'') || '/';
+      const qs = new URLSearchParams(window.location.search || '');
+      // /produto/:id (via vercel rewrite), /produto.html?id=, /produto (com ?id=)
+      const prodMatch = path.match(/^\/produto\/(.+)$/);
+      if (prodMatch && prodMatch[1]) return { view: 'product', productId: decodeURIComponent(prodMatch[1]) };
+      if (path === '/produto' || path === '/produto.html') return { view: 'product', productId: qs.get('id') || '' };
+      if (path === '/checkout' || path === '/checkout.html') return { view: 'checkout' };
+      return { view: 'home' };
+    }
 
-      // Fallback (caso rode local sem rewrites)
+    function goTo(view, productId) {
+      if (view === 'home') { window.location.href = '/'; return; }
+      if (view === 'checkout') { window.location.href = '/checkout'; return; }
+      if (view === 'product' && productId) {
+        window.location.href = '/produto/' + encodeURIComponent(productId);
+        return;
+      }
+    }
+
+    function changeView(view, product = null) {
+      const current = parseRoute();
+
+      // Navegação real entre páginas (pra link compartilhável)
+      if (view === 'home') {
+        if (current.view !== 'home') return goTo('home');
+      }
+      if (view === 'checkout') {
+        if (current.view !== 'checkout') return goTo('checkout');
+      }
+      if (view === 'product') {
+        const pid = (product && product.id) ? product.id : (current.productId || '');
+        if (!pid) { return goTo('home'); }
+        if (current.view !== 'product' || String(current.productId || '') !== String(pid)) return goTo('product', pid);
+      }
+
+      // Se já está na página certa, só troca o estado + renderiza
       state.view = view;
       if (product) {
         state.selectedProduct = product;
         state.productForm = { size: '', color: '', quantity: 1, imageIndex: 0 };
       }
       const subHeader = document.getElementById('sub-header');
-      if(view !== 'home') subHeader.classList.add('hidden');
-      else subHeader.classList.remove('hidden');
+      if (subHeader) {
+        if(view !== 'home') subHeader.classList.add('hidden');
+        else subHeader.classList.remove('hidden');
+      }
       window.scrollTo(0, 0);
       renderApp();
     }
+
 
     // --- API ViaCEP com Validação ---
     async function handleCepInput(el) {
@@ -675,6 +714,17 @@ var PRODUCTS = window.PRODUCTS || [];
 
     function getProductHTML() {
       const p = state.selectedProduct;
+      if(!p) {
+        return `
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <div class="bg-white border border-gray-200 rounded-[2rem] p-6 md:p-8 shadow-sm">
+              <h1 class="text-2xl md:text-3xl font-black text-gray-900 mb-2">Produto não encontrado</h1>
+              <p class="text-gray-600 font-medium mb-6">O link pode estar errado ou o produto foi removido.</p>
+              <button onclick="changeView('home')" class="bg-brand hover:bg-[#1bc762] text-gray-900 font-black px-6 py-3 rounded-xl transition">Voltar pra loja</button>
+            </div>
+          </section>
+        `;
+      }
       const sizes = (Array.isArray(p.sizes) && p.sizes.length > 0) ? p.sizes : [];
       const hasColors = p.colors && p.colors.length > 0;
       const idx = state.productForm.imageIndex;
@@ -760,6 +810,17 @@ var PRODUCTS = window.PRODUCTS || [];
 
     function handleAddToCart() {
       const p = state.selectedProduct;
+      if(!p) {
+        return `
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <div class="bg-white border border-gray-200 rounded-[2rem] p-6 md:p-8 shadow-sm">
+              <h1 class="text-2xl md:text-3xl font-black text-gray-900 mb-2">Produto não encontrado</h1>
+              <p class="text-gray-600 font-medium mb-6">O link pode estar errado ou o produto foi removido.</p>
+              <button onclick="changeView('home')" class="bg-brand hover:bg-[#1bc762] text-gray-900 font-black px-6 py-3 rounded-xl transition">Voltar pra loja</button>
+            </div>
+          </section>
+        `;
+      }
       const { size, color, quantity } = state.productForm;
       const hasColors = p.colors && p.colors.length > 0;
       
@@ -1008,104 +1069,32 @@ var PRODUCTS = window.PRODUCTS || [];
           ${state.coupon.discount > 0 ? `<div class="flex justify-between text-sm text-green-600 bg-green-50 p-1.5 rounded-lg"><span>Desconto (${state.coupon.discount*100}%)</span><span>-${formatPrice(subtotal*state.coupon.discount)}</span></div>` : ''}
           <div class="flex justify-between font-black text-xl text-gray-900 border-t border-gray-200 pt-3"><span>Total</span><span>${formatPrice(total)}</span></div>
         </div>
-        <button onclick="toggleCart(false); changeView('checkout');" class="w-full bg-brand hover:bg-[#1bc762] text-gray-900 font-black py-4 rounded-xl shadow-lg transition transform hovebootstrapApp();
--y-1 text-lg">Finalizar Compra</button>
+        <button onclick="toggleCart(false); changeView('checkout');" class="w-full bg-brand hover:bg-[#1bc762] text-gray-900 font-black py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1 text-lg">Finalizar Compra</button>
       `;
     }
 
-    renderApp();
+    // --- Rota inicial (home / produto / checkout) ---
+    const initial = parseRoute();
+    state.view = initial.view;
+    state.pendingProductId = initial.productId || '';
 
+    const subHeaderInit = document.getElementById('sub-header');
+    if (subHeaderInit && state.view !== 'home') subHeaderInit.classList.add('hidden');
 
-// ---- Multi-page bootstrap (index / produto / checkout) ----
-function getProductKey(p) {
-  if (!p) return '';
-  const key = (p.slug || p.handle || p.id || p.code || p.sku || '').toString().trim();
-  if (key) return key;
-  const name = (p.name || p.title || 'produto').toString().trim().toLowerCase();
-  return name
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '') || 'produto';
-}
-
-function getProductIdFromURL() {
-  try {
-    const url = new URL(window.location.href);
-    let pid = url.searchParams.get('pid') || url.searchParams.get('id') || '';
-    if (!pid) {
-      const m = window.location.pathname.match(/\/produto\/(.+)$/);
-      if (m && m[1]) pid = decodeURIComponent(m[1].split('/')[0]);
+    function syncSelectedProductFromRoute() {
+      const current = parseRoute();
+      if (current.view === 'product') {
+        const pid = current.productId || state.pendingProductId || '';
+        if (pid && Array.isArray(PRODUCTS) && PRODUCTS.length > 0) {
+          const found = PRODUCTS.find(x => String(x.id) === String(pid));
+          state.selectedProduct = found || null;
+        }
+      }
     }
-    return (pid || '').trim();
-  } catch (_) {
-    return '';
-  }
-}
 
-function ensureSelectedProductFromURL() {
-  const isProductPage = window.location.pathname.startsWith('/produto') || window.location.pathname.endsWith('/produto.html');
-  if (!isProductPage) return;
+    window.addEventListener("catalog-loaded", () => {
+      syncSelectedProductFromRoute();
+    });
 
-  const pid = getProductIdFromURL();
-  if (!pid) return;
-
-  const list = Array.isArray(PRODUCTS) ? PRODUCTS : (window.PRODUCTS || []);
-  const found = list.find(p =>
-    String(p.id || '') === pid ||
-    String(p.slug || '') === pid ||
-    String(p.handle || '') === pid ||
-    String(p.code || '') === pid ||
-    String(p.sku || '') === pid
-  );
-
-  if (found) {
-    state.view = 'product';
-    state.selectedProduct = found;
-    state.productForm = { size: '', color: '', quantity: 1, imageIndex: 0 };
-    const subHeader = document.getElementById('sub-header');
-    if (subHeader) subHeader.classList.add('hidden');
-  } else if (!state.loadingCatalog) {
-    state.catalogError = "Produto não encontrado.";
-    state.view = 'home';
-  }
-}
-
-function bootstrapApp() {
-  // Expor globals (para onclick do HTML renderizado funcionar)
-  window.state = state;
-  window.renderApp = renderApp;
-  window.changeView = changeView;
-  window.toggleCart = toggleCart;
-  window.toggleFilter = toggleFilter;
-  window.applyAppCoupon = applyAppCoupon;
-  window.handleAddToCart = handleAddToCart;
-  window.nextHomePage = nextHomePage;
-  window.prevHomePage = prevHomePage;
-  window.updateCartQuantity = updateCartQuantity;
-  window.updateCartUI = updateCartUI;
-  window.finalizeOrder = finalizeOrder;
-  window.setFormData = setFormData;
-  window.handleCepInput = handleCepInput;
-
-  // Definir view inicial pela URL
-  const path = window.location.pathname;
-  if (path.startsWith('/checkout') || path.endsWith('/checkout.html')) {
-    state.view = 'checkout';
-  } else if (path.startsWith('/produto') || path.endsWith('/produto.html')) {
-    state.view = 'product';
-  } else {
-    state.view = 'home';
-  }
-
-  const subHeader = document.getElementById('sub-header');
-  if (subHeader) {
-    if (state.view !== 'home') subHeader.classList.add('hidden');
-    else subHeader.classList.remove('hidden');
-  }
-
-  // Se for produto, tenta selecionar quando o catálogo chegar (e também agora, caso já exista)
-  ensureSelectedProductFromURL();
-
-  // Render inicial (vai mostrar shimmer até o catálogo carregar)
-  renderApp();
-}
+    syncSelectedProductFromRoute();
+    renderApp();

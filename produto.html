@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produto • OttakuBrasil Store</title>
-
-  <!-- Tailwind (mantido para não quebrar layout) -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -17,88 +16,143 @@
       }
     }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes slide-in-top {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slide-in-right {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(0); }
+    }
+    .animate-slide-in-top { animation: slide-in-top 0.2s ease-out forwards; }
+    .animate-slide-in-right { animation: slide-in-right 0.3s ease-out forwards; }
+    
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;  
+      overflow: hidden;
+    }
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;  
+      overflow: hidden;
+    }
 
-  <!-- CSS global -->
-  <link rel="stylesheet" href="/style.css" />
+    /* Shimmer skeleton */
+    @keyframes shimmer {
+      0% { background-position: -600px 0; }
+      100% { background-position: 600px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #eeeeee 0%, #f6f6f6 40%, #eeeeee 80%);
+      background-size: 600px 100%;
+      animation: shimmer 1.2s infinite linear;
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#f6f7fb] text-gray-900">
-<header class="fixed top-0 left-0 w-full z-50 bg-brand/85 backdrop-blur-lg shadow-md text-gray-900 border-b border-white/40 transition-all duration-300" id="main-header">
-<div class="container mx-auto px-4 pt-3 pb-3">
-<div class="flex items-center justify-between">
-<div class="text-2xl font-black tracking-tighter cursor-pointer flex items-center gap-2" onclick="changeView('home')">
-<span class="bg-gray-900 text-brand px-2 py-1 rounded-lg text-xl transform -rotate-2 shadow-sm">OTK</span>
+<body class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen pt-[75px] overflow-x-hidden">
+
+  <!-- SVGs Helpers -->
+  
+
+  <!-- DATA & STATE -->
+
+
+
+
+  <!-- CABEÇALHO -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-brand/85 backdrop-blur-lg shadow-md text-gray-900 border-b border-white/40 transition-all duration-300" id="main-header">
+    <div class="container mx-auto px-4 pt-3 pb-3">
+      <div class="flex items-center justify-between">
+        <div class="text-2xl font-black tracking-tighter cursor-pointer flex items-center gap-2" onclick="changeView('home')">
+          <span class="bg-gray-900 text-brand px-2 py-1 rounded-lg text-xl transform -rotate-2 shadow-sm">OTK</span>
           OttakuBrasil
         </div>
-<div class="flex items-center gap-4">
-<a class="hidden sm:flex items-center gap-1 hover:text-white transition" href="https://instagram.com/ottakubrasil" id="icon-instagram" target="_blank"></a>
-<button class="relative p-2 bg-white/20 hover:bg-white/40 rounded-full transition-all" onclick="toggleCart(true)">
-<span id="icon-bag"></span>
-<span class="hidden absolute -top-1 -right-1 bg-gray-900 text-brand text-xs font-black rounded-full w-5 h-5 flex items-center justify-center shadow-md" id="cart-badge">0</span>
-</button>
-</div>
-</div>
-<!-- SUB HEADER (Pesquisa/Filtros) -->
-<div class="overflow-visible transition-all duration-300 ease-in-out max-h-20 opacity-100 mt-3 pb-1" id="sub-header">
-<div class="flex items-center gap-2 relative">
-<div class="w-full relative flex items-center">
-<span class="absolute left-3 text-gray-700" id="icon-search"></span>
-<input class="w-full pl-10 pr-4 py-2.5 bg-white/40 border border-white/50 rounded-xl text-sm text-gray-900 placeholder-gray-700 font-medium focus:outline-none focus:bg-white/60 focus:border-white transition-all backdrop-blur-sm" id="search-input" oninput="updateSearch(event.target.value)" placeholder="Buscar animes, produtos..." type="text"/>
-</div>
-<div class="relative flex-shrink-0" id="filter-container">
-<button class="p-2.5 rounded-xl transition-all border bg-white/40 border-white/50 hover:bg-white/50" id="filter-btn" onclick="toggleFilter()" title="Filtros">
-<span class="text-gray-900" id="icon-sliders"></span>
-</button>
-<div id="filter-dropdown"></div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<main id="app-root" class="flex-grow pt-[3px]"></main>
-<footer class="bg-brand/85 backdrop-blur-lg text-gray-900 py-10 mt-12 border-t border-white/40">
-<div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-<div>
-<h3 class="text-xl font-black mb-3 flex items-center gap-2 justify-start">OttakuBrasil</h3>
-<p class="text-sm font-medium mb-4 text-gray-800">
+        <div class="flex items-center gap-4">
+          <a href="https://instagram.com/ottakubrasil" target="_blank" class="hidden sm:flex items-center gap-1 hover:text-white transition" id="icon-instagram"></a>
+          <button class="relative p-2 bg-white/20 hover:bg-white/40 rounded-full transition-all" onclick="toggleCart(true)">
+            <span id="icon-bag"></span>
+            <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-gray-900 text-brand text-xs font-black rounded-full w-5 h-5 flex items-center justify-center shadow-md">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB HEADER (Pesquisa/Filtros) -->
+      <div id="sub-header" class="overflow-visible transition-all duration-300 ease-in-out max-h-20 opacity-100 mt-3 pb-1">
+        <div class="flex items-center gap-2 relative">
+          <div class="w-full relative flex items-center">
+            <span id="icon-search" class="absolute left-3 text-gray-700"></span>
+            <input type="text" id="search-input" placeholder="Buscar animes, produtos..." class="w-full pl-10 pr-4 py-2.5 bg-white/40 border border-white/50 rounded-xl text-sm text-gray-900 placeholder-gray-700 font-medium focus:outline-none focus:bg-white/60 focus:border-white transition-all backdrop-blur-sm" oninput="updateSearch(event.target.value)">
+          </div>
+          <div class="relative flex-shrink-0" id="filter-container">
+            <button onclick="toggleFilter()" id="filter-btn" class="p-2.5 rounded-xl transition-all border bg-white/40 border-white/50 hover:bg-white/50" title="Filtros">
+              <span id="icon-sliders" class="text-gray-900"></span>
+            </button>
+            <div id="filter-dropdown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <!-- Modificação 1: Adicionado pt-[3px] para dar o espaçamento exato que você pediu -->
+  <main id="app-root" class="flex-grow pt-[3px]"></main>
+
+  <!-- RODAPÉ -->
+  <footer class="bg-brand/85 backdrop-blur-lg text-gray-900 py-10 mt-12 border-t border-white/40">
+    <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+      <div>
+        <h3 class="text-xl font-black mb-3 flex items-center gap-2 justify-start">OttakuBrasil</h3>
+        <p class="text-sm font-medium mb-4 text-gray-800">
           Sua loja geek favorita! Especialistas em camisetas exclusivas, action figures e muito mais. Feito de fãs para fãs.
         </p>
-</div>
-<div>
-<h3 class="text-lg font-black mb-3">Links Rápidos</h3>
-<ul class="space-y-2 text-sm font-bold">
-<li><button class="hover:text-white transition" onclick="changeView('home')">Início</button></li>
-<li><button class="hover:text-white transition" onclick="toggleCart(true)">Meu Carrinho</button></li>
-<li><a class="hover:text-white transition" href="https://instagram.com/ottakubrasil" target="_blank">@ottakubrasil</a></li>
-</ul>
-</div>
-<div>
-<h3 class="text-lg font-black mb-3">Contato</h3>
-<ul class="space-y-3 text-sm font-bold">
-<li class="flex items-center gap-2 justify-start"><span id="ft-icon-insta"></span> @ottakubrasil</li>
-<li class="flex items-center gap-2 justify-start"><span id="ft-icon-phone"></span> (31) 9 7237-9858</li>
-</ul>
-</div>
-</div>
-<div class="container mx-auto px-4 mt-8 pt-6 border-t border-gray-900/10 text-left text-xs font-bold text-gray-800">
-      © <span id="current-year"></span> OttakuBrasil. Todos os direitos reservados.
+      </div>
+      <div>
+        <h3 class="text-lg font-black mb-3">Links Rápidos</h3>
+        <ul class="space-y-2 text-sm font-bold">
+          <li><button onclick="changeView('home')" class="hover:text-white transition">Início</button></li>
+          <li><button onclick="toggleCart(true)" class="hover:text-white transition">Meu Carrinho</button></li>
+          <li><a href="https://instagram.com/ottakubrasil" target="_blank" class="hover:text-white transition">@ottakubrasil</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-black mb-3">Contato</h3>
+        <ul class="space-y-3 text-sm font-bold">
+          <li class="flex items-center gap-2 justify-start"><span id="ft-icon-insta"></span> @ottakubrasil</li>
+          <li class="flex items-center gap-2 justify-start"><span id="ft-icon-phone"></span> (31) 9 7237-9858</li>
+        </ul>
+      </div>
     </div>
-</footer>
-<div class="fixed inset-0 z-[60] flex justify-end hidden" id="cart-sidebar">
-<div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleCart(false)"></div>
-<div class="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-slide-in-right">
-<div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-<h2 class="text-xl font-black text-gray-900 flex items-center gap-2">
-<span class="text-brand" id="cb-icon-bag"></span> Seu Carrinho
-        </h2>
-<button class="p-2 hover:bg-gray-200 rounded-full transition" id="cb-icon-x" onclick="toggleCart(false)"></button>
-</div>
-<div class="flex-grow overflow-y-auto p-4 space-y-4" id="cart-items"></div>
-<div class="p-5 border-t border-gray-200 bg-gray-50" id="cart-footer"></div>
-</div>
-</div>
+    <div class="container mx-auto px-4 mt-8 pt-6 border-t border-gray-900/10 text-left text-xs font-bold text-gray-800">
+      &copy; <span id="current-year"></span> OttakuBrasil. Todos os direitos reservados.
+    </div>
+  </footer>
 
-<!-- JS global -->
-<script type="module" src="/script.js"></script>
+  <!-- CARRINHO LATERAL -->
+  <div id="cart-sidebar" class="fixed inset-0 z-[60] flex justify-end hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleCart(false)"></div>
+    <div class="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-slide-in-right">
+      <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+        <h2 class="text-xl font-black text-gray-900 flex items-center gap-2">
+          <span class="text-brand" id="cb-icon-bag"></span> Seu Carrinho
+        </h2>
+        <button onclick="toggleCart(false)" class="p-2 hover:bg-gray-200 rounded-full transition" id="cb-icon-x"></button>
+      </div>
+      <div id="cart-items" class="flex-grow overflow-y-auto p-4 space-y-4"></div>
+      <div id="cart-footer" class="p-5 border-t border-gray-200 bg-gray-50"></div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT PRINCIPAL -->
+  
+  <script src="script.js" defer></script>
 </body>
 </html>
+

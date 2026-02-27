@@ -1,16 +1,24 @@
 {
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/index.html"
+      "source": "/produto/:id",
+      "destination": "/produto.html?id=:id"
+    },
+    {
+      "source": "/produto/:id/",
+      "destination": "/produto.html?id=:id"
     },
     {
       "source": "/checkout",
       "destination": "/checkout.html"
     },
     {
-      "source": "/produto/:pid",
-      "destination": "/produto.html?pid=:pid"
+      "source": "/checkout/",
+      "destination": "/checkout.html"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
     }
   ]
 }
